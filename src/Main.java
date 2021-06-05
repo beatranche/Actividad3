@@ -5,15 +5,16 @@ import java.util.Scanner;
 public class Main {
 /** 
  * Clase Main con lanzador de excepciones
- * @param String args
+ * @param args String
  * @throws Exception Excepciones
  */
-	public static void main(String[] args) throws Excepciones {
+	public static void main(String[] args){
 		Scanner sc = new Scanner(System.in);
 		boolean salir = false;
 		int opcion = 0;
 		String empleados = "empleados.txt";
 		String clientes = "clientes.txt";
+		
 		
 		//Menú principal
 		while (!salir) {
@@ -60,14 +61,14 @@ public class Main {
 							int yy = Integer.parseInt(parts[2]);
 						    Calendar fechaHoy = Calendar.getInstance();
 						    edad = fechaHoy.get(Calendar.YEAR) - yy;
-						    //Comprobación de rango de edad solicitado
-						    if(edad < 18 && edad >= 67) {			    	
-						    	throw new Excepciones("No se puede introducir empleado con " + edad + "años. \nRango de edad válido de 18 a 67 años");
-							 }
+						    Excepciones.validar(edad);
 						   break;
 						}catch(ArrayIndexOutOfBoundsException e){
 							e.getMessage();
 							System.out.println("Introduce una fecha válida");
+						}catch(Excepciones e) {
+							e.getMessage();
+							System.out.println("Rango no válido. La edad debe ser entre 18 y 67");
 						}
 				
 						System.out.println("Introduce puesto: ");
@@ -121,6 +122,7 @@ public class Main {
 					switch (menuCli) {
 
 					case 1:
+						int id = 0;
 						Archivos.crearArchivoCliente(clientes);
 						System.out.println("Introduce nombre:");
 						String nombre = sc.next();
@@ -135,9 +137,9 @@ public class Main {
 						int yy = Integer.parseInt(parts[2]);
 					    Calendar fechaHoy = Calendar.getInstance();
 					    int edad = fechaHoy.get(Calendar.YEAR) - yy;
-						System.out.println("Introduce categoria: ");
+						System.out.println("Introduce categoria(particular | empresa): ");
 						String categoria = sc.next();
-						int id = 0;
+						
 						// Introducción de cliente con datos proporcionados por usuario
 						Cliente cliente = new Cliente(nombre, apellidos, direccion, feNac, categoria, id++);
 						Archivos.introducirUsuario(clientes, cliente.toString());
